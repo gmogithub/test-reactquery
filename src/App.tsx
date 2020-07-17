@@ -1,26 +1,35 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Home } from "./Home";
+import { ReactQueryConfigProvider } from 'react-query';
+
+const queryConfig: any = {
+  shared: {
+    suspense: false,
+  },
+  queries: {
+    enabled: true,
+    retry: 3,
+    retryDelay: (attemptIndex: number) => Math.min(1000 * 2 ** attemptIndex, 30000),
+    staleTime: 0,
+    cacheTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: true,
+    refetchInterval: false,
+    refetchOnMount: true,
+    useErrorBoundary: false, // falls back to suspense
+  },
+  mutations: {
+    throwOnError: false,
+    useErrorBoundary: false, // falls back to suspense
+
+  }
+}
 
 function App() {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <ReactQueryConfigProvider config={queryConfig}>
+      <Home/>
+    </ReactQueryConfigProvider>)
 }
 
 export default App;
